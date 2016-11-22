@@ -1,6 +1,6 @@
 # Immutable Queue
 
-Immutable Queue implementation that uses two stacks of opposite order to keep track of elements.
+Immutable Queue implementation that uses two opposite stacks to keep track of elements.
 
 ## Installation 
 
