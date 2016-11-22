@@ -8,7 +8,7 @@ Immutable Queue implementation that uses two stacks of opposite order to keep tr
 	
 	mvn install
 	
-	```
+```
 
 ## usage 
 
