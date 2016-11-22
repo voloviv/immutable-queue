@@ -32,7 +32,7 @@ Immutable Queue implementation that uses two stacks of opposite order to keep tr
 	// Get the last element in the queue
 	T obj = queue.tail();
 	 
-    ```
+```
     
 ## Running tests 
 
@@ -40,4 +40,4 @@ Immutable Queue implementation that uses two stacks of opposite order to keep tr
 	
 	mvn test
 	
-	```
+```
