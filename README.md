@@ -2,7 +2,7 @@
 
 Immutable Queue implementation that uses two stacks of opposite order to keep track of elements.
 
-## installation 
+## Installation 
 
 ```bash
 	
@@ -10,7 +10,7 @@ Immutable Queue implementation that uses two stacks of opposite order to keep tr
 	
 ```
 
-## usage 
+## Usage 
 
 ```java
 	
