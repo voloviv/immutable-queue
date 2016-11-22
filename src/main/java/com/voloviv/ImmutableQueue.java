@@ -4,82 +4,72 @@ import java.util.NoSuchElementException;
 
 
 /**
- * Immutable Queue Implementation
- *
+ * Immutable Queue implementation that uses two stacks of 
+ * opposite order to keep track of elements.
+ * 
  */
 public class ImmutableQueue<T> implements Queue<T>
 {
-	private static class ImmutableStack<T>{
+	private static class Stack<T>{
 		
 		private T head;
-		private ImmutableStack<T> tail;
+		private Stack<T> tail;
 		private int size;
 		
 		/**
 		 * Default constructor
-		 * head = null; tail = null and size = null
 		 * 
 		 * */
-		private ImmutableStack(){
+		private Stack(){
 			this.head = null;
 			this.tail = null;
 			this.size = 0;
 		}
 		
 		/**
-		 * Constructor Overloading
-		 * T Object
-		 * ImmutableStack tail
+		 * Constructor Overloading 
+		 * 
+		 * @param T obj
+		 * @param Stack tail
 		 * 
 		 * */
-		
-		private ImmutableStack(T obj,ImmutableStack<T> tail){
+		private Stack(T obj,Stack<T> tail){
 			this.head = obj;
 			this.tail = tail;
 			this.size = tail.size+1;
 		}
 		
-		/**
-		 * Return empty stack
-		 * 
-		 * */
-		
-		public static ImmutableStack empty(){
-			return new ImmutableStack();
-		}
 		
 		/**
-		 * Checking if stack is empty
-		 * with their size
+		 * Check if stack is empty
 		 * 
-		 * @return true of false if Stack is empty or not
+		 * @return true or false depending on whether stack is empty
+		 * 
 		 * */
-		
 		public boolean isEmpty(){
-			return this.size ==0;
+			return this.size == 0;
 		}
 		
 		/**
-		 * Push into the stack 
+		 * Push new element into stack
 		 * 
-		 * @param E object
-		 * @return ImmutableStack with object
+		 * @param T object
+		 * @return Stack
+		 * 
 		 * */
-		
-		public ImmutableStack<T> push(T obj){
-			return new ImmutableStack<T>(obj,this);
+		public Stack<T> push(T obj){
+			return new Stack<T>(obj,this);
 		}
+		
 		/**
-		 * Take stack object and push the head of the tail stack
-		 * to the stack
-		 * do this until the stack is empty
+		 * Reverse the order of the stack
 		 * 
-		 * @return reverse stack
+		 * @return Stack reversed stack
+		 * 
 		 * */
-
-		public ImmutableStack<T> reverseStack(){
-			ImmutableStack<T> stack = new ImmutableStack<T>();
-			ImmutableStack<T> tail = this;
+		public Stack<T> reverseStack(){
+			Stack<T> stack = new Stack<T>();
+			Stack<T> tail = this;
 			while(!tail.isEmpty()){
 				stack = stack.push(tail.head);
 				tail = tail.tail;
@@ -88,88 +78,91 @@ public class ImmutableQueue<T> implements Queue<T>
 		}
 	}
 	
-	private ImmutableStack<T> forward;
-	private ImmutableStack<T> reverse;
+	private Stack<T> forward;
+	private Stack<T> reverse;
 	
 	/**
 	 * Constructor
-	 * Return 
 	 * 
+	 * Create 2 Stack objects for opposite ordering of queue elements
 	 * 
 	 * */
 	public ImmutableQueue(){
-		this.forward = ImmutableStack.empty();
-		this.reverse = ImmutableStack.empty();
+		this.forward = new Stack<T>();
+		this.reverse = new Stack<T>();
 	}
 	
 	/**
 	 * Constructor overloading 
-	 * Using two immutable stack order and reverse
 	 * 
+	 * @param Stack forward
+	 * @param Stack reverse
 	 * 
 	 * */
-	
-	public ImmutableQueue(ImmutableStack<T> forward,ImmutableStack<T> reverse){
+	public ImmutableQueue(Stack<T> forward,Stack<T> reverse){
 		this.forward = forward;
 		this.reverse = reverse;
 	}
 	
 	/**
-	 * Enqueue Object
-	 * if object is null throw IllegalArgumentException
+	 * Add object to queue
+	 * Throws IllegalArgumentException
 	 * 
-	 * @return ImmutableQueue with object 
+	 * @return ImmutableQueue
+	 *  
 	 * */
-	
-	
 	public Queue<T> enQueue(T object){
-		if(object==null) throw new IllegalArgumentException();
-		return new ImmutableQueue<T>(this.forward.push(object),this.reverse);
+		if(object!=null) {
+			return new ImmutableQueue<T>(this.forward.push(object),this.reverse);
+		}
+		throw new IllegalArgumentException();
 	}
 	
 	/**
-	 * Balancing the Queue
-	 * reverse the order stack and assign it to reverse stack
-	 * and make order stack empty 
+	 * Reverse the "forward" stack, and assign 
+	 * new stack to the "reverse" instance variable.
+	 * Used by the "head" to obtain the first element
+	 * in the queue
 	 * 
 	 * */
-	
-	private void balanceQueue(){
+	private void forwardToReverse(){
 		this.reverse= this.forward.reverseStack();
-		this.forward = ImmutableStack.empty();
+		this.forward = new Stack<T>();
 	}
 
 	/**
-	 * Dequeue from the queue
-	 * if Queue is empty then throw NoSuchElementException
-	 * 
-	 * if Reverse Stack is not empty then return Immutable queue with 
-	 * reverse stack's tail object
-	 * 
-	 * else reverse the Order ImmutableStack and take the tail of this
-	 * and clean the order ImmutableStack 
+	 * Remove the first element in the queue
 	 * 
 	 * @return Queue
 	 * */
-	
 	public Queue<T> deQueue(){
 		if(this.isEmpty())
 			throw new NoSuchElementException();
 		if(!this.reverse.isEmpty()){
 			return new ImmutableQueue<T>(this.forward,this.reverse.tail);
 		}else{
-			return new ImmutableQueue<T>(ImmutableStack.empty(),this.forward.reverseStack().tail);
+			return new ImmutableQueue<T>(new Stack<T>(),this.forward.reverseStack().tail);
 		}		
 	}
 	
+	/**
+	 * Return the first element in the queue
+	 * 
+	 * @return T first element
+	 * */
     public T head(){
     	if (this.isEmpty())
 			throw new NoSuchElementException();
 		if (this.reverse.isEmpty())
-			balanceQueue();
+			forwardToReverse();
 		return this.reverse.head;
     };
     
+    /**
+	 * Return the last element in the queue
+	 * 
+	 * @return T last element
+	 * */
     public T tail(){
     	if (this.isEmpty())
 			throw new NoSuchElementException();
@@ -180,36 +173,13 @@ public class ImmutableQueue<T> implements Queue<T>
 		}
     }
     
+    /**
+	 * Get queue size (equal to length of forward + reverse stack)
+	 * 
+	 * @return boolean queue size
+	 * */
     public boolean isEmpty(){
     	return this.forward.size + this.reverse.size == 0;
     };
-    
-    public static void main(String [] args){
-    	Queue<Integer> data = new ImmutableQueue<Integer>();
-		int num =0;
-		int max = 1000000;
-		long current = System.currentTimeMillis();
-		
-		while(++num <= max){
-			int value = (int)(Math.random()*100);
-			data = data.enQueue(value);
-		}	
-		System.out.println("Time for enqueue "+max+" randome integer "+(System.currentTimeMillis()-current)+" miliseconds");
-		
-		while(--num>100){
-			data =data.deQueue();
-		}
-		
-		while(++num <= 120){
-			int value = (int)(Math.random()*100);
-			data = data.enQueue(value);
-		}
-		
-		while(--num>100){
-			data =data.deQueue();
-		}
-		
-		System.out.println("Time for dequeue "+max+" randome integer "+(System.currentTimeMillis()-current)+" miliseconds");
-    }
     
 }

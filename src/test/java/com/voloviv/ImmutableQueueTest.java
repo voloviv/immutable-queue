@@ -2,15 +2,14 @@ package com.voloviv;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import org.junit.Test;
-
 import static junit.framework.TestCase.assertTrue;
 
 import com.voloviv.ImmutableQueue;
 
 /**
- * Unit test for simple App.
+ * Unit tests for ImmutableQueue
+ * 
  */
 public class ImmutableQueueTest 
 {
@@ -41,5 +40,27 @@ public class ImmutableQueueTest
     	assertTrue(old_queue != queue);
     	assertTrue(queue.head() == data.get(1));
     	
+    }
+    
+    @Test
+    public void getHeadShouldReturnTheFirstElementInQueue(){
+		
+		Queue<Integer> queue = new ImmutableQueue<Integer>();
+    	for (Integer i : data){
+    		queue = queue.enQueue(i);
+    	};
+    	
+    	assertTrue(queue.head() == data.get(1));
+    }
+    
+    @Test
+    public void getTailShouldReturnTheLastElementInQueue(){
+		
+		Queue<Integer> queue = new ImmutableQueue<Integer>();
+    	for (Integer i : data){
+    		queue = queue.enQueue(i);
+    	};
+    	
+    	assertTrue(queue.tail() == data.get(data.size()-1));
     }
 }
