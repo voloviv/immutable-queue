@@ -13,9 +13,9 @@ import com.voloviv.ImmutableQueue;
  */
 public class ImmutableQueueTest 
 {
-	private final ArrayList<Integer> data = new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5));
+    private final ArrayList<Integer> data = new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5));
 	
-	@Test
+    @Test
     public void enQueueShoudlReturnNewQueueInstanceWithNewElementAdded(){
 		
 		Queue<Integer> queue = new ImmutableQueue<Integer>();
@@ -50,7 +50,7 @@ public class ImmutableQueueTest
     		queue = queue.enQueue(i);
     	};
     	
-    	assertTrue(queue.head() == data.get(1));
+    	assertTrue(queue.head() == data.get(0));
     }
     
     @Test
